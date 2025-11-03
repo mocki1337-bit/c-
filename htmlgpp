@@ -1,0 +1,719 @@
+ <!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0503" />
+    <title>Сморгонь 1916</title>
+
+    <!-- ШРИФТ SF PRO DISPLAY -->
+    <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
+
+    <!-- АНИМАЦИИ -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: linear-gradient(135deg, rgba(10, 5, 3, 0.96), rgba(28, 15, 8, 0.88));
+            --glass: rgba(255, 255, 255, 0.105);
+            --border: rgba(255, 255, 255, 0.165);
+            --blur: blur(19px);
+            --shadow: 0 14px 42px rgba(0, 0, 0, 0.48);
+            --gold: #d4a574;
+            --green: #34d399;
+            --text: #f0e6d2;
+            --muted: rgba(240, 230, 210, 0.78);
+            --radius: 24px;
+            --transition: all 0.38s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg), url('https://images.unsplash.com/photo-1605812830455-3f8d943c77b9?auto=format&fit=crop') fixed center/cover;
+            color: var(--text);
+            font-family: 'SF Pro Display', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 26px 22px;
+        }
+
+        .glass {
+            background: var(--glass);
+            border-radius: var(--radius);
+            border: 1.3px solid var(--border);
+            backdrop-filter: var(--blur);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin: 20px 0;
+            transition: var(--transition);
+        }
+
+        .glass:hover {
+            box-shadow: 0 18px 52px rgba(0, 0, 0, 0.58);
+            transform: translateY(-3px);
+        }
+
+        .header {
+            text-align: center;
+            padding: 55px 0 45px;
+        }
+
+        .header h1 {
+            font-size: 3.6em;
+            font-weight: 800;
+            letter-spacing: -1.4px;
+            background: linear-gradient(90deg, #d4a574, #f0d9b5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 28px rgba(0, 0, 0, 0.651);
+            margin-bottom: 14px;
+        }
+
+        .header p {
+            font-size: 1.28em;
+            font-style: italic;
+            color: var(--muted);
+            letter-spacing: -0.35px;
+        }
+
+        .modes {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin: 50px 0 40px;
+        }
+
+        .mode-card {
+            background: var(--glass);
+            border-radius: var(--radius);
+            padding: 36px 28px;
+            width: 320px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-14px) scale(1.045);
+            box-shadow: 0 24px 60px rgba(139, 69, 19, 0.38);
+        }
+
+        .mode-icon {
+            font-size: 3.4em;
+            margin-bottom: 18px;
+            filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35));
+        }
+
+        .mode-card h3 {
+            font-size: 1.52em;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .mode-card p {
+            font-size: 1.08em;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        #encyclopedia,
+        #game {
+            display: none;
+        }
+
+        .section-title {
+            font-size: 1.92em;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 28px;
+            text-align: center;
+            letter-spacing: -0.7px;
+        }
+
+        .fact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+            margin-top: 22px;
+        }
+
+        .fact-card {
+            background: var(--glass);
+            border-radius: var(--radius);
+            border: 1.3px solid var(--border);
+            backdrop-filter: var(--blur);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .fact-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 22px 50px rgba(139, 69, 19, 0.32);
+        }
+
+        .fact-img {
+            width: 100%;
+            height: 195px;
+            object-fit: cover;
+            filter: sepia(0.28) brightness(0.94);
+            transition: filter 0.42s ease;
+        }
+
+        .fact-card:hover .fact-img {
+            filter: sepia(0.12) brightness(1.06);
+        }
+
+        .fact-content {
+            padding: 24px;
+            position: relative;
+        }
+
+        .fact-year {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #8B4513;
+            color: white;
+            padding: 7px 14px;
+            border-radius: 22px;
+            font-size: 0.92em;
+            font-weight: 600;
+            letter-spacing: -0.25px;
+        }
+
+        .fact-title {
+            font-size: 1.45em;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 12px;
+            line-height: 1.32;
+        }
+
+        .fact-text {
+            font-size: 1.05em;
+            color: var(--muted);
+            line-height: 1.58;
+        }
+
+        .character-grid {
+            display: flex;
+            justify-content: center;
+            gap: 26px;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+
+        .char-btn {
+            background: rgba(139, 69, 19, 0.28);
+            border: 1.6px solid #8B4513;
+            color: var(--text);
+            padding: 22px 30px;
+            border-radius: 16px;
+            font-size: 1.32em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            min-width: 190px;
+            text-align: center;
+            backdrop-filter: blur(7px);
+        }
+
+        .char-btn:hover {
+            background: rgba(160, 82, 45, 0.42);
+            transform: scale(1.07);
+            box-shadow: 0 10px 22px rgba(139, 69, 19, 0.32);
+        }
+
+        .chat-area {
+            max-height: 540px;
+            overflow-y: auto;
+            padding: 20px;
+            margin-bottom: 22px;
+            border-radius: 16px;
+            background: rgba(0, 0, 0, 0.18);
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            margin: 18px 0;
+            padding: 20px 24px;
+            border-radius: 24px;
+            font-weight: 500;
+            line-height: 1.55;
+            animation: msgPop 0.52s cubic-bezier(0.34, 1.56, 0.64, 1);
+            backdrop-filter: blur(7px);
+            box-shadow: 0 5px 14px rgba(0, 0, 0, 0.22);
+        }
+
+        .ai-msg {
+            background: rgba(44, 26, 16, 0.68);
+            margin-right: auto;
+            border-bottom-left-radius: 7px;
+        }
+
+        .user-msg {
+            background: rgba(93, 63, 47, 0.68);
+            margin-left: auto;
+            border-bottom-right-radius: 7px;
+        }
+
+        @keyframes msgPop {
+            from {
+                transform: scale(0.86);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .choice-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin: 26px 0;
+        }
+
+        .choice-btn {
+            background: rgba(139, 69, 19, 0.72);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 16px;
+            font-size: 1.22em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(9px);
+        }
+
+        .choice-btn:hover {
+            background: rgba(160, 82, 45, 0.92);
+            transform: translateX(6px);
+        }
+
+        .progress-container {
+            height: 14px;
+            background: rgba(0, 0, 0, 0.28);
+            border-radius: 7px;
+            overflow: hidden;
+            margin: 26px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #8B4513, #d4a574);
+            border-radius: 7px;
+            transition: width 1.4s ease;
+            box-shadow: 0 0 14px rgba(212, 165, 116, 0.42);
+        }
+
+        /* VOLUME SWITCH — МОЩНЫЙ HAPTIC */
+        #volume-control {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-weight: 600;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.94);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+            user-select: none;
+        }
+
+        #volume-label {
+            transition: color 0.38s ease;
+        }
+
+        #volume-toggle {
+            width: 54px;
+            height: 34px;
+            position: relative;
+        }
+
+        #volume-switch {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .volume-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.155);
+            border-radius: 17px;
+            backdrop-filter: blur(15px);
+            border: 1.1px solid rgba(255, 255, 255, 0.22);
+            box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.38), 0 1px 5px rgba(0, 0, 0, 0.28);
+            transition: var(--transition);
+        }
+
+        .volume-slider::before {
+            content: '';
+            position: absolute;
+            height: 29px;
+            width: 29px;
+            left: 2.5px;
+            bottom: 2.5px;
+            background: linear-gradient(145deg, #fafafa, #dadada);
+            border-radius: 14.5px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.98);
+            transition: var(--transition);
+        }
+
+        #volume-switch:checked+.volume-slider {
+            background: rgba(52, 199, 89, 0.40);
+            border-color: rgba(52, 199, 89, 0.58);
+            box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.38), 0 0 16px rgba(52, 199, 89, 0.38);
+        }
+
+        #volume-switch:checked+.volume-slider::before {
+            transform: translateX(20px);
+            background: linear-gradient(145deg, #4ade80, #22c55e);
+        }
+
+        /* АНИМАЦИИ */
+        @keyframes flash {
+
+            0%,
+            100% {
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-11px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(11px);
+            }
+        }
+
+        @media (max-width:768px) {
+            .header h1 {
+                font-size: 2.9em;
+            }
+
+            .mode-card {
+                width: 100%;
+                max-width: 360px;
+            }
+
+            #volume-control {
+                top: 18px;
+                right: 18px;
+                font-size: 15px;
+                gap: 12px;
+            }
+
+            #volume-toggle {
+                width: 50px;
+                height: 30px;
+            }
+
+            .volume-slider::before {
+                width: 25px;
+                height: 25px;
+            }
+
+            #volume-switch:checked+.volume-slider::before {
+                transform: translateX(20px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- ЗАГОЛОВОК -->
+        <header class="header" data-aos="fade-down" data-aos-duration="1800">
+            <h1>СМОРГОНЬ 1916</h1>
+            <p>Хроники Первой мировой войны</p>
+        </header>
+
+        <!-- РЕЖИМЫ -->
+        <section class="modes" data-aos="fade-up" data-aos-delay="500">
+            <div class="mode-card" onclick="App.switchMode('encyclopedia')">
+                <div class="mode-icon">Book</div>
+                <h3>Узнать правду</h3>
+                <p>Факты, фото, видео</p>
+            </div>
+            <div class="mode-card" onclick="App.switchMode('game')">
+                <div class="mode-icon">Gamepad</div>
+                <h3>Выжить в аду</h3>
+                <p>Интерактивная история</p>
+            </div>
+        </section>
+
+        <!-- ЭНЦИКЛОПЕДИЯ -->
+        <section id="encyclopedia" class="glass">
+            <h2 class="section-title">Исторические факты</h2>
+            <div class="fact-grid" id="facts-container"></div>
+        </section>
+
+        <!-- ИГРА -->
+        <section id="game" class="glass">
+            <h2 class="section-title">Выбери персонажа</h2>
+            <div class="character-grid" id="character-selection"></div>
+            <div id="gameplay-area" style="display:none;">
+                <div class="chat-area" id="chat-messages"></div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="survival-progress"></div>
+                </div>
+                <div class="choice-container" id="choice-buttons"></div>
+            </div>
+        </section>
+
+        <!-- VOLUME SWITCH -->
+        <div id="volume-control">
+            <span id="volume-label">Volume Off</span>
+            <div id="volume-toggle">
+                <input type="checkbox" id="volume-switch" />
+                <label for="volume-switch" class="volume-slider"></label>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- БИБЛИОТЕКИ -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+    <!-- ЛОГИКА + HAPTIC -->
+    <script>
+        AOS.init({ duration: 1200, once: true });
+
+        const App = {
+            currentMode: '',
+            facts: [],
+            currentCharacter: '',
+            survivalScore: 0,
+            soundEnabled: false,
+            backgroundMusic: null,
+
+            // HAPTIC — МОЩНЫЙ ОТКЛИК
+            haptic: {
+                impact: (type) => window.Telegram?.WebApp?.HapticFeedback?.impactOccurred?.(type),
+                selection: () => window.Telegram?.WebApp?.HapticFeedback?.selectionChanged?.(),
+                flash: () => {
+                    const f = document.createElement('div');
+                    f.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:radial-gradient(circle,rgba(255,150,50,0.8),transparent);pointer-events:none;z-index:9999;opacity:0;animation:flash 0.6s forwards;';
+                    document.body.appendChild(f);
+                    setTimeout(() => f.remove(), 600);
+                },
+                shake: () => {
+                    document.body.style.animation = 'shake 0.5s ease-out';
+                    setTimeout(() => document.body.style.animation = '', 500);
+                },
+                pop: (el) => {
+                    el.style.opacity = '0'; el.style.transform = 'scale(0.88)';
+                    requestAnimationFrame(() => {
+                        el.style.transition = 'all 0.38s ease-out';
+                        el.style.opacity = '1'; el.style.transform = 'scale(1)';
+                    });
+                }
+            },
+
+            init() {
+                if (window.Telegram?.WebApp) Telegram.WebApp.ready();
+                this.initVolume();
+                this.loadFacts();
+            },
+
+            loadFacts() {
+                fetch('facts.json')
+                    .then(r => r.json())
+                    .then(data => {
+                        this.facts = data;
+                        this.renderFacts();
+                    })
+                    .catch(() => {
+                        this.facts = [
+                            { id: 1, title: 'Пример факта', text: 'Факты не загружены', year: '1916', image: 'https://via.placeholder.com/300' }
+                        ];
+                        this.renderFacts();
+                    });
+            },
+
+            renderFacts() {
+                const container = document.getElementById('facts-container');
+                container.innerHTML = this.facts.map(f => `
+                    <div class="fact-card" onclick="App.showFact(${f.id})" data-aos="fade-up" data-aos-delay="${f.id * 120}">
+                        <img src="${f.image}" class="fact-img" alt="${f.title}" loading="lazy">
+                        <div class="fact-content">
+                            <div class="fact-year">${f.year}</div>
+                            <div class="fact-title">${f.title}</div>
+                            <p class="fact-text">${f.text.substring(0, 120)}...</p>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            showFact(id) {
+                const f = this.facts.find(x => x.id === id);
+                if (f) alert(`${f.title} (${f.year})\n\n${f.text}`);
+                this.haptic.impact('light');
+            },
+
+            switchMode(mode) {
+                this.currentMode = mode;
+                document.getElementById('encyclopedia').style.display = mode === 'encyclopedia' ? 'block' : 'none';
+                document.getElementById('game').style.display = mode === 'game' ? 'block' : 'none';
+                if (mode === 'game') this.renderCharacters();
+                this.haptic.selection();
+            },
+
+            renderCharacters() {
+                document.getElementById('character-selection').innerHTML = `
+                    <div class="char-btn" onclick="App.startGame('soldier')">Солдат</div>
+                    <div class="char-btn" onclick="App.startGame('nurse')">Медсестра</div>
+                    <div class="char-btn" onclick="App.startGame('resident')">Житель</div>
+                `;
+                document.querySelectorAll('.char-btn').forEach(btn => {
+                    btn.addEventListener('click', () => this.haptic.impact('medium'));
+                });
+            },
+
+            startGame(char) {
+                this.currentCharacter = char;
+                document.getElementById('character-selection').style.display = 'none';
+                document.getElementById('gameplay-area').style.display = 'block';
+                this.addMessage('AI', `Ты — ${char === 'soldier' ? 'солдат' : char === 'nurse' ? 'медсестра' : 'житель'}. 1916 год. Что делать?`);
+                this.showChoices(['Осмотреться', 'Позвать помощь', 'Спрятаться']);
+                this.haptic.impact('heavy');
+            },
+
+            showChoices(options) {
+                const container = document.getElementById('choice-buttons');
+                container.innerHTML = options.map(opt => `
+                    <button class="choice-btn" onclick="App.selectChoice('${opt}')">${opt}</button>
+                `).join('');
+                document.querySelectorAll('.choice-btn').forEach(btn => {
+                    btn.addEventListener('click', () => this.haptic.selection());
+                });
+            },
+
+            selectChoice(choice) {
+                const userMsg = this.addMessage('user', choice);
+                this.haptic.pop(userMsg);
+                this.haptic.selection();
+
+                document.getElementById('choice-buttons').innerHTML = '';
+                setTimeout(() => {
+                    const response = this.generateResponse(choice);
+                    const aiMsg = this.addMessage('AI', response);
+                    this.haptic.pop(aiMsg);
+                    this.haptic.impact('heavy');
+                    if (this.soundEnabled) new Audio('https://cdn.freesound.org/previews/276/276022_5123850-lq.mp3').play().catch(() => { });
+                    this.haptic.flash();
+                    this.haptic.shake();
+                    this.updateSurvival(12);
+                }, 1000);
+            },
+
+            generateResponse(choice) {
+                const responses = {
+                    'Осмотреться': 'Ты видишь разрушенные дома. Дым поднимается к небу.',
+                    'Позвать помощь': 'Ты кричишь. Из окопа выглядывает раненый солдат.',
+                    'Спрятаться': 'Ты ныряешь в воронку. Снаряд разрывается рядом.'
+                };
+                return responses[choice] || 'Ты действуешь...';
+            },
+
+            addMessage(sender, text) {
+                const area = document.getElementById('chat-messages');
+                const bubble = document.createElement('div');
+                bubble.className = `message-bubble ${sender === 'user' ? 'user-msg' : 'ai-msg'}`;
+                bubble.innerHTML = `<strong>${sender === 'user' ? 'Ты' : 'AI'}:</strong> ${text}`;
+                area.appendChild(bubble);
+                bubble.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                return bubble;
+            },
+
+            updateSurvival(points) {
+                this.survivalScore += points;
+                const bar = document.getElementById('survival-progress');
+                bar.style.width = Math.min(this.survivalScore, 100) + '%';
+            },
+
+            // VOLUME — МОЩНАЯ ВИБРАЦИЯ
+            initVolume() {
+                const label = document.getElementById('volume-label');
+                const checkbox = document.getElementById('volume-switch');
+
+                checkbox.addEventListener('change', () => {
+                    this.soundEnabled = checkbox.checked;
+                    label.textContent = this.soundEnabled ? 'Volume On' : 'Volume Off';
+                    label.style.color = this.soundEnabled ? 'var(--green)' : 'rgba(255,255,255,0.94)';
+
+                    if (this.soundEnabled && !this.backgroundMusic) {
+                        this.backgroundMusic = new Audio('https://cdn.freesound.org/previews/620/620461_5674468-lq.mp3');
+                        this.backgroundMusic.loop = true;
+                        this.backgroundMusic.volume = 0.28;
+                        this.backgroundMusic.play().catch(() => { });
+                    } else if (!this.soundEnabled && this.backgroundMusic) {
+                        this.backgroundMusic.pause();
+                    }
+
+                    // МОЩНЫЙ HAPTIC ПРИ ПЕРЕКЛЮЧЕНИИ
+                    this.haptic.impact('heavy');
+                    setTimeout(() => this.haptic.impact('medium'), 80);
+                    setTimeout(() => this.haptic.impact('light'), 160);
+                });
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => App.init());
+    </script>
+    
+</body>
+
+</html>
